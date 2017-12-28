@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkx.mapper.AddressMapper">
+    <resultMap id="addressMap" type="address">
+        <id property="id" column="id"/>
+        <result property="userNum" column="userNum"/>
+        <result property="detail" column="detail"/>
+        <result property="regTime" column="regTime"/>
+        <association property="province" column="pid" javaType="province">
+            <id property="pid" column="pid"/>
+            <result property="pname" column="pname"/>
+        </association>
+        <association property="city" column="cid" javaType="city">
+            <id property="cid" column="cid"/>
+            <result property="cname" column="cname"/>
+        </association>
+    </resultMap>
+    <insert id="addAddress" parameterType="address" keyProperty="id" useGeneratedKeys="true">
+        insert into address(userNum,pid,cid,detail,regTime)values(#{userNum},#{province.pid},#{city.cid},#{detail},#{regTime})
+    </insert>
+    <select id="selAllProvince" resultType="province">
+        select * from province
+    </select>
+    <select id="selAllCityByPid" parameterType="int" resultType="city">
+        select * from city where pid=#{pid}
+    </select>
+    <select id="selAllAddressByUserNum" parameterType="string" resultMap="addressMap">
+        select a.*,pname,cname from address a,province p,city c where userNum=#{userNum} and a.pid=p.pid and a.cid=c.cid
+    </select>
+</mapper>

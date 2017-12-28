@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zkx.mapper.UserMapper">
+    <insert id="addUser" parameterType="user">
+        insert into user(userNum,username,password,type,personID,birth,realName,regTime,integral,balance,email,consume,telephone)values(#{userNum},#{username},#{password},#{type},#{personID},#{birth},#{realName},#{regTime},#{integral},#{balance},#{email},#{consume},#{consume})
+    </insert>
+    <select id="selUser" parameterType="user" resultType="user">
+        select * from user
+        <where>
+            <if test="username!=null">
+                and username = #{username}
+            </if>
+            <if test="userNum!=null">
+                and userNum =#{userNum}
+            </if>
+        </where>
+    </select>
+
+    <select id="selAllUser" parameterType="int" resultType="user">
+        select * from user limit #{arg0},#{arg1};
+    </select>
+    <select id="selUserCount" resultType="int">
+        select count(*) from user;
+    </select>
+    <update id="updateUser" parameterType="user">
+        update user set password=#{password},type=#{type},birth=#{birth},integral=#{integral},balance=#{balance},email=#{email},main_address_id=#{main_address_id},consume=#{consume},telephone=#{telephone} where userNum=#{userNum}
+    </update>
+
+</mapper>
